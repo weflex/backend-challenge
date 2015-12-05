@@ -4,12 +4,12 @@ var url = require('url');
 var app = {};
 
 app.use = function (route, fn) {
-  if ('function' == typeof route) {
+  if ('function' === typeof route) {
     fn = route;
     route = '/';
   }
   // maybe ignore wrong arguments handler
-  if ('function' == typeof fn) {
+  if ('function' === typeof fn) {
     this.handlers.push({route: route, handleFn: fn});
   }
 };

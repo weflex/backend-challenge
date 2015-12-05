@@ -83,7 +83,7 @@ describe('middleware', function () {
         res.end('end');
       });
 
-      app.listen(3003, function(){
+      app.listen(3003, function () {
         var self = this;
 
         request(self)
@@ -116,13 +116,13 @@ describe('middleware', function () {
         res.end('end');
       });
 
-      app.listen(3005, function(){
+      app.listen(3005, function () {
         var self = this;
 
         request(self)
-            .get('/')
-            .expect(200)
-            .expect('end',done);
+          .get('/')
+          .expect(200)
+          .expect('end', done);
       });
     });
 
