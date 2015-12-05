@@ -19,7 +19,7 @@ app.handle = function (req, res) {
   var path = url.parse(req.url).pathname;
   if (undefined === path) path = '/';
 
-  function next() {
+  function next () {
     var handler = app.handlers[index++];
 
     if (!handler) {
