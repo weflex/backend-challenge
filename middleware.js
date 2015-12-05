@@ -8,14 +8,16 @@ app.use = function (route, fn) {
         fn = route;
         route = '/';
     }
-
-    this.handlers.push({route: route, handleFn: fn});
+    // maybe ignore wrong arguments handler
+    if ('function' == typeof fn) {
+        this.handlers.push({route: route, handleFn: fn});
+    }
 };
 
 app.handle = function (req, res) {
     var index = 0;
     var path = url.parse(req.url).pathname;
-    if (undefined == path) path = '/';
+    if (undefined === path) path = '/';
 
     function next() {
         var handler = app.handlers[index++];
@@ -24,7 +26,7 @@ app.handle = function (req, res) {
             return;
         }
 
-        if (handler.route == '/' || handler.route == path.toLowerCase()) {
+        if (handler.route === '/' || handler.route === path.toLowerCase()) {
             handler.handleFn(req, res, next);
         } else {
             return next();
