@@ -3,34 +3,33 @@ var http = require('http');
 exports.createServer = function () {
   var middlewares = [];
 
-  function next(req, res, index) {
-    if(index == undefined) {
-      index = -1;
-    }
-    return function () {
-      for(var i = index + 1; i < middlewares.length; i++) {
-        if(middlewares[i].path == '*' || middlewares[i].path == req.url) {
-          middlewares[i].action.call(this, req, res, next(req, res, i));
+  var server = http.createServer(function (req, res) {
+    function next(index) {
+      if(index == undefined) {
+        index = 0;
+      }
+      return function () {
+        if(middlewares[index].path == '/' || middlewares[index].path == req.url) {
+          middlewares[index].handle(req, res, next(index + 1));
           return;
+        } else {
+          next(index + 1)();
         }
       }
     }
-  }
-
-  var server = http.createServer(function (req, res) {
-    next(req, res)();
+    next()();
   });
 
   http.Server.prototype.use = function () {
     if(arguments.length == 1) {
       middlewares.push({
-        path: '*',
-        action: arguments[0]
+        path: '/',
+        handle: arguments[0]
       });
     } else {
       middlewares.push({
         path: arguments[0],
-        action: arguments[1]
+        handle: arguments[1]
       });
     }
   }
