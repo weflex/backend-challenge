@@ -1,6 +1,7 @@
 var http = require('http');
 
 exports.createServer = function () {
+  var app = {}
   var middlewares = [];
 
   var server = http.createServer(function (req, res) {
@@ -20,7 +21,7 @@ exports.createServer = function () {
     next()();
   });
 
-  http.Server.prototype.use = function () {
+  app.use = function () {
     if(arguments.length == 1) {
       middlewares.push({
         path: '/',
@@ -33,5 +34,10 @@ exports.createServer = function () {
       });
     }
   }
-  return server;
+
+  app.listen = function() {
+    return server.listen.apply(server, arguments)
+  }
+
+  return app;
 }
