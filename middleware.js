@@ -30,7 +30,7 @@ app.use = function (path, handle) {
   }
 
   if('function' !== typeof handle) {
-    throw new Error('Arguments type error');
+    throw new TypeError('handle is required to be a function.');
   }
 
   this.middlewares.push({
