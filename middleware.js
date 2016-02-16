@@ -21,18 +21,20 @@ exports.createServer = function () {
     next()();
   });
 
-  app.use = function () {
-    if(arguments.length == 1) {
-      middlewares.push({
-        path: '/',
-        handle: arguments[0]
-      });
-    } else {
-      middlewares.push({
-        path: arguments[0],
-        handle: arguments[1]
-      });
+  app.use = function (path, handle) {
+    if('string' != typeof path) {
+      handle = path;
+      path = '/';
     }
+
+    if('function' != typeof handle) {
+      throw new Error('Arguments type error');
+    }
+
+    middlewares.push({
+      path: path,
+      handle: handle
+    });
   }
 
   app.listen = function() {
