@@ -22,12 +22,12 @@ exports.createServer = function () {
   });
 
   app.use = function (path, handle) {
-    if('string' != typeof path) {
+    if('string' !== typeof path) {
       handle = path;
       path = '/';
     }
 
-    if('function' != typeof handle) {
+    if('function' !== typeof handle) {
       throw new Error('Arguments type error');
     }
 
