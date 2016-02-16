@@ -3,20 +3,24 @@ var http = require('http');
 var app = {};
 
 app.handle = function (req, res) {
-  function next(index) {
-    if(index == undefined) {
-      index = 0;
+  var index = 0;
+
+  function next() {
+    if(index >= app.middlewares.length) {
+      return;
     }
-    return function () {
-      if(app.middlewares[index].path == '/' || app.middlewares[index].path == req.url) {
-        app.middlewares[index].handle(req, res, next(index + 1));
-        return;
-      } else {
-        next(index + 1)();
-      }
+
+    var middleware = app.middlewares[index++];
+
+    if(middleware.path === '/' || middleware.path === req.url) {
+      middleware.handle(req, res, next);
+      return;
+    } else {
+      next();
     }
   }
-  next()();
+
+  next();
 }
 
 app.use = function (path, handle) {
