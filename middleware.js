@@ -12,6 +12,7 @@ app.handle = function (req, res) {
     var middleware = app.middlewares[index++];
     if (middleware.path === '/' || middleware.path === req.url) {
       middleware.handle(req, res, next);
+      res.end();
       return;
     } else {
       next();
