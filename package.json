@@ -6,6 +6,13 @@
   },
   "scripts": {
     "start": "node app.js",
+    "lint": "node_modules/.bin/eslint middleware.js",
     "test": "node_modules/.bin/mocha -R dot test.js"
+  },
+  "devDependencies": {
+    "babel-eslint": "^5.0.0",
+    "eslint": "^2.2.0",
+    "eslint-config-weflex": "^1.0.2",
+    "eslint-plugin-react": "^4.2.1"
   }
 }
