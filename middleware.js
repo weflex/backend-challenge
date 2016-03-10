@@ -1,12 +1,11 @@
-var http = require('http');
+const http = require('http');
+const app = {};
 
-var app = {};
-
-app.handle = function handle (req, res) {
+app.handle = function handle(req, res) {
   var index = 0;
 
-  function next () {
-    var stack = app.stack[index++];
+  function next() {
+    const stack = app.stack[index++];
     if (!stack) return;
 
     if (stack.route === '/' || stack.route === req.url) {
@@ -16,25 +15,26 @@ app.handle = function handle (req, res) {
     }
   }
   next();
-}
+};
 
-app.use = function use (route, handle) {
+app.use = function use(route, handle) {
   if (typeof route !== 'string') {
     handle = route;
     route = '/';
   }
 
-  if (typeof handle !== 'function')
+  if (typeof handle !== 'function') {
     throw new TypeError('handle needs to be a function');
+  }
 
   this.stack.push({route: route, handle: handle});
-}
+};
 
-app.listen = function listen () {
+app.listen = function listen() {
   return this.server.listen.apply(this.server, arguments);
 };
 
-exports.createServer = function () {
+exports.createServer = function createServer() {
   app.stack = [];
   app.server = http.createServer(app.handle);
   return app;
