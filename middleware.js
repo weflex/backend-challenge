@@ -30,10 +30,9 @@ module.exports = {
 
               if ((key === '*' || path === key) && handler) {
                 handler(req, res, next);
+                res.end();
               } else if (i !== routes.length) {
                 next();
-              } else {
-                res.end();
               }
             }
           }
