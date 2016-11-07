@@ -6,13 +6,24 @@ exports.createServer = function () {
     if (app.handlers){
 
       var fns = [];
-      if (app.handlers._all){
-        fns = fns.concat(app.handlers._all);
-      }
+      app.handlers.forEach(function(ele){
+        if (typeof ele[0] === 'string'){
+          if (ele[0] === req.url){
+            fns = fns.concat(ele[1]);
+          }
+        }else{
+            fns = fns.concat(ele[0]);
+        }
+      })
+      console.log(app.handlers)
+      // .fo
+      // if (app.handlers){
+      //   fns = fns.concat(app.handlers._all);
+      // }
 
-      if(app.handlers[req.url]){
-        fns = fns.concat(app.handlers[req.url])
-      }
+      // if(app.handlers[req.url]){
+      //   fns = fns.concat(app.handlers[req.url])
+      // }
 
       var i = 0;
       function next(){
@@ -21,7 +32,7 @@ exports.createServer = function () {
           fns[i](req,res,next);
         }
       }
-      console.log(app.handlers[req.url])
+      // console.log(app.handlers[req.url])
 
       fns[i](req,res,next);
 
@@ -38,20 +49,18 @@ exports.createServer = function () {
   });
 
   app.use = function (path, handler){
-    if (typeof(path) === 'string' ){
+    if (typeof(path) === 'string'){
       if(app.handlers){
-        app.handlers[path] = handler;
+        app.handlers = [ ...app.handlers, [path, handler]];
       }else {
-        app.handlers = {};
-        app.handlers[path] = handler;  
+        app.handlers = [[path, handler]];  
       }
     }else{
-      if(app.handlers && app.handlers['_all']){
-        app.handlers['_all'] = app.handlers['_all'].concat([path]);
-      }else if (app.handlers){
-        app.handlers['_all'] = [path];  
+      
+      if(app.handlers){
+        app.handlers = ([...app.handlers, [path]]);
       }else{
-        app.handlers = {_all: [path]}
+        app.handlers = [[path]];
       }
     }
   };
