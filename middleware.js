@@ -5,11 +5,10 @@ exports.createServer = function () {
   const app = http.createServer(function(req, res){
     if (app.handlers){
 
-      next
       var fns = [];
       if (app.handlers._all){
         fns = fns.concat(app.handlers._all);
-      } 
+      }
 
       if(app.handlers[req.url]){
         fns = fns.concat(app.handlers[req.url])
@@ -22,7 +21,7 @@ exports.createServer = function () {
           fns[i](req,res,next);
         }
       }
-      console.log(app.handlers._all)
+      console.log(app.handlers[req.url])
 
       fns[i](req,res,next);
 
@@ -35,7 +34,7 @@ exports.createServer = function () {
 
       
     }
-    res.end('okay');
+    
   });
 
   app.use = function (path, handler){
