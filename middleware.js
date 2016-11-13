@@ -28,7 +28,7 @@ _proto.use=function(route,fn){
     return this
 }
 _proto.handle=function(req,res,out){
-    console.log(out)
+    
     let index = 0,
         removed=''
     let next= err =>{
@@ -39,7 +39,7 @@ _proto.handle=function(req,res,out){
         }
         let layer = this._stack[index++]
         if(!layer){
-        console.log('out')
+        
             out && out(err)
             return 
         }
