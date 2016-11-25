@@ -83,7 +83,7 @@ describe('middleware', function () {
         res.end('end');
       });
 
-      app.listen(3003, function(){
+      app.listen(3003, function () {
         var self = this;
 
         request(self)
@@ -100,6 +100,29 @@ describe('middleware', function () {
                   .expect('acgoodbye', done);
               });
           });
+      });
+    });
+
+    it('handler not function', function (done) {
+      var app = middleware.createServer();
+
+      app.use('/', false);
+
+      app.use('/', function (req, res, next) {
+        next();
+      });
+
+      app.use(function (req, res) {
+        res.end('end');
+      });
+
+      app.listen(3005, function () {
+        var self = this;
+
+        request(self)
+          .get('/')
+          .expect(200)
+          .expect('end', done);
       });
     });
 
